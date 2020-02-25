@@ -9,14 +9,12 @@ Use the api.netfield.io API POST /devices/{deviceId}/methods in this way
 In this sample the parameter "input1" is used to set the target temperature
 ```
 {
-    "containerName": "netfield-app-sample-arm32",
-    "methodName": "SetTargetTemperature",
-    "methodPayload": {
-        "payload": {
-        "input1": "180",
-        "input2": "centigrade"
-        }
-    }
+  "containerName": "netfield-app-sample-multi-arch",
+  "methodName": "SetTargetTemperature",
+  "methodPayload": {
+    "temperature": "180",
+    "unit": "centigrade"
+  }
 }
 ```
 ## Build and publish your Docker image
