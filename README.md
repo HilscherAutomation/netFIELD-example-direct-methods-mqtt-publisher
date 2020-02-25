@@ -21,7 +21,7 @@ In this sample the parameter "input1" is used to set the target temperature
 ```
 ## Build and publish your Docker image
 adjust your dockerfile accordingly
-
+ 
 Login to Docker
 ```sudo docker login```
 
