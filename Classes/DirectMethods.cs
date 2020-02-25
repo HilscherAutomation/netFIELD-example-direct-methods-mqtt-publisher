@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
@@ -9,7 +10,7 @@ namespace NetfieldDeviceSample.Classes
     public class DirectMethods
     {
         public static ModuleClient ioTHubModuleClient { get; private set; }
-        private static SimulateData _simulateData {get; set;}
+        private static SimulateData _simulateData { get; set; }
 
         /// <summary>
         /// Initializes the ModuleClient
@@ -33,18 +34,17 @@ namespace NetfieldDeviceSample.Classes
         /// Use the api.netfield.io API POST /devices/{deviceId}/methods in this way
         /// In this sample the parameter "input1" is used to set the target temperature
         /*
-        {
-        "containerName": "netfield-app-sample-arm32",
-        "methodName": "SetTargetTemperature",
-        "methodPayload": {
-            "payload": {
-            "input1": "180",
-            "input2": "centigrade"
+          {
+            "containerName": "<container name>",
+            "methodName": "SetTargetTemperature",
+            "methodPayload": {
+                "temperature": "180",
+                "unit": "centigrade"
             }
           }
-        }
         */
         /// </summary>
+        
         public static async Task RegisterDirectMethodsAsync()
         {
             Console.WriteLine("Registering direct method callbacks");
@@ -53,15 +53,35 @@ namespace NetfieldDeviceSample.Classes
 
         private static async Task<MethodResponse> OnSetTargetTemperature(MethodRequest methodRequest, object userContext)
         {
+            DirectMethodResult result = new DirectMethodResult();
+
             Console.WriteLine("SetTargetTemperature has been called");
             Console.WriteLine($"Method Payload: {methodRequest.DataAsJson}");
 
-            DirectMethodParam param = new DirectMethodParam();
-            param = JsonSerializer.Deserialize<DirectMethodParam>(methodRequest.DataAsJson);
+            MethodPayload methodPayload = new MethodPayload();
+            methodPayload = JsonSerializer.Deserialize<MethodPayload>(methodRequest.DataAsJson);
 
-            _simulateData.SetTemperature(int.Parse(param.payload.input1));
-        
-            return new MethodResponse(200);
+            int TargetTemperature = int.Parse(methodPayload.temperature);
+
+            if (TargetTemperature >= _simulateData.RuleList.MinTemperature && TargetTemperature <= _simulateData.RuleList.MaxTemperature)
+            {
+                _simulateData.SetTemperature(TargetTemperature);
+                result.methodPayload = methodPayload;
+                result.result = true;
+                result.msg = "ok";
+            }
+            else
+            {
+                result.methodPayload = methodPayload;
+                result.result = false;
+                result.msg = $"Target temperature out of range: {_simulateData.RuleList.MinTemperature} ... {_simulateData.RuleList.MaxTemperature}";
+
+            }
+
+            byte[] ResultAsJson = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(result));
+            MethodResponse mr = new MethodResponse(ResultAsJson, 200);
+
+            return mr;
         }
     }
 }

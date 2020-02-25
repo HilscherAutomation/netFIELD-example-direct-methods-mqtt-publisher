@@ -10,7 +10,7 @@ namespace NetfieldDeviceSample.Classes
         private readonly MqttService _mqttService;
         private Timer dataTimer { set; get; }
         private int TimerInSeconds = 5;
-        private Rules RuleList { get; set; }
+        public Rules RuleList { get; private set; }
         private int Temperature { get; set; }
 
         public SimulateData(MqttService mqttService)
@@ -50,7 +50,7 @@ namespace NetfieldDeviceSample.Classes
             if (Temperature == RuleList.MaxTemperature)
                 SetTemperature(180);
             else
-                Temperature = Temperature + 4;
+                Temperature = Temperature + 1;
 
             await _mqttService.PublishAsync("processdata", json);
         }
