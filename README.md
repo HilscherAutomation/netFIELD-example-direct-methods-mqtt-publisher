@@ -1,5 +1,7 @@
 # netFIELD direct Methods MQTT publisher example
 
+[![license][license-shields]][LICENSE]
+
 This example code shows how to create a Edge based application which publishes sample data to a MQTT Bus and how to utilize Microsoft direct Methods to communicate through an API to this container to change values.
 
 This method will register the direct methods on the the EdgeHub.
