@@ -44,7 +44,7 @@ namespace NetfieldDeviceSample.Classes
           }
         */
         /// </summary>
-        
+
         public static async Task RegisterDirectMethodsAsync()
         {
             Console.WriteLine("Registering direct method callbacks");
@@ -53,34 +53,39 @@ namespace NetfieldDeviceSample.Classes
 
         private static async Task<MethodResponse> OnSetTargetTemperature(MethodRequest methodRequest, object userContext)
         {
-            DirectMethodResult result = new DirectMethodResult();
+            byte[] ResultAsJson = null;
 
-            Console.WriteLine("SetTargetTemperature has been called");
-            Console.WriteLine($"Method Payload: {methodRequest.DataAsJson}");
-
-            MethodPayload methodPayload = new MethodPayload();
-            methodPayload = JsonSerializer.Deserialize<MethodPayload>(methodRequest.DataAsJson);
-
-            int TargetTemperature = int.Parse(methodPayload.temperature);
-
-            if (TargetTemperature >= _simulateData.RuleList.MinTemperature && TargetTemperature <= _simulateData.RuleList.MaxTemperature)
+            await Task.Run(() =>
             {
-                _simulateData.SetTemperature(TargetTemperature);
-                result.methodPayload = methodPayload;
-                result.result = true;
-                result.msg = "ok";
-            }
-            else
-            {
-                result.methodPayload = methodPayload;
-                result.result = false;
-                result.msg = $"Target temperature out of range: {_simulateData.RuleList.MinTemperature} ... {_simulateData.RuleList.MaxTemperature}";
+                DirectMethodResult result = new DirectMethodResult();
 
-            }
+                Console.WriteLine("SetTargetTemperature has been called");
+                Console.WriteLine($"Method Payload: {methodRequest.DataAsJson}");
 
-            byte[] ResultAsJson = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(result));
+                MethodPayload methodPayload = new MethodPayload();
+                methodPayload = JsonSerializer.Deserialize<MethodPayload>(methodRequest.DataAsJson);
+
+                int TargetTemperature = int.Parse(methodPayload.temperature);
+
+                if (TargetTemperature >= _simulateData.RuleList.MinTemperature && TargetTemperature <= _simulateData.RuleList.MaxTemperature)
+                {
+                    _simulateData.SetTemperature(TargetTemperature);
+                    result.methodPayload = methodPayload;
+                    result.successful = true;
+                    result.msg = "ok";
+                }
+                else
+                {
+                    result.methodPayload = methodPayload;
+                    result.successful = false;
+                    result.msg = $"Target temperature out of range: {_simulateData.RuleList.MinTemperature} ... {_simulateData.RuleList.MaxTemperature}";
+
+                }
+
+                ResultAsJson = Encoding.ASCII.GetBytes(JsonSerializer.Serialize(result));
+            });
+
             MethodResponse mr = new MethodResponse(ResultAsJson, 200);
-
             return mr;
         }
     }

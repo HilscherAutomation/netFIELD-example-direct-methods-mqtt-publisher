@@ -32,23 +32,23 @@ namespace NetfieldDeviceSample.Classes
 
         private async void OnTimer(Object source, ElapsedEventArgs e)
         {
-            Data data = new Data();
+            MqttPubData mqttPubData = new MqttPubData();
 
-            foreach (Data d in RuleList.TargetData)
+            foreach (MqttPubData d in RuleList.TargetData)
             {
                 if (Temperature == d.Temperature)
                 {
-                    data.DataType = "actual";
-                    data.Temperature = Temperature;
-                    data.Speed = d.Speed;
+                    mqttPubData.DataType = "actual";
+                    mqttPubData.Temperature = Temperature;
+                    mqttPubData.Speed = d.Speed;
                 }
             }
 
-            string json = JsonSerializer.Serialize(data);
+            string json = JsonSerializer.Serialize(mqttPubData);
 
             // increase temperature automatically
             if (Temperature == RuleList.MaxTemperature)
-                SetTemperature(180);
+                SetTemperature(RuleList.MinTemperature);
             else
                 Temperature = Temperature + 1;
 
