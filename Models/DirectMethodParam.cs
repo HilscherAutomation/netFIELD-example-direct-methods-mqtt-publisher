@@ -1,15 +1,13 @@
 namespace NetfieldDeviceSample.Models
 {
-    public class MethodPayload
+    public class DirectMethodParam
     {
-        public string temperature {get; set;} // target temperature
-        public string unit {get; set;} // unit
+        public Payload payload {get; set;}
     }
 
-    public class DirectMethodResult
+    public class Payload
     {
-        public MethodPayload methodPayload {get; set;}
-        public bool result  {get; set;}
-        public string msg {get; set;}
+        public string input1 {get; set;} // target temperature
+        public string input2 {get; set;} // unit
     }
 }
