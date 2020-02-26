@@ -38,7 +38,8 @@ Push your docker image to your registry (arm)
 ```docker push 'your-registry-uri/your-registry':netfied-device-sample-x86-0.3.0```
 
 ### multi-arch
-```vi ~/.docker/config.json
+```
+vi ~/.docker/config.json
 add option: "experimental": "enabled"
 
 docker manifest create 'your-registry-uri/your-registry':netfield-app-sample-multi-arch
