@@ -19,14 +19,12 @@ namespace NetfieldDeviceSample
             _mqttconfig = mqttConfig;
         }
         
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("Connect to MQTT Broker");
             mqttService = new MqttService(_mqttconfig.Value.Server, _mqttconfig.Value.Port);
             simulateData = new SimulateData(mqttService);
-            DirectMethods.Init(simulateData);
-            
-            return Task.CompletedTask;
+            await DirectMethods.Init(simulateData);
         }
         
         public Task StopAsync(CancellationToken cancellationToken)
