@@ -42,11 +42,9 @@ Push your docker image to your registry (arm)
 vi ~/.docker/config.json
 add option: "experimental": "enabled"
 
-docker manifest create 'your-registry-uri/your-registry':netfield-app-sample-multi-arch
-'your-registry-uri/your-registry':netfield-app-sample-x86-0.3.0
-'your-registry-uri/your-registry':netfield-app-sample-arm32-0.2.0 --amend
+docker manifest create 'your-registry-uri/your-registry':netfield-app-sample-multi-arch 'your-registry-uri/your-registry':netfield-app-sample-x86-0.3.0 'your-registry-uri/your-registry':netfield-app-sample-arm32-0.2.0 --amend
 
-docker manifest annotate 'your-registry-uri/your-registry':netfield-app-sample-multi-arch
-'your-registry-uri/your-registry':netfield-app-sample-arm32-0.3.0 --os linux --arch arm
+docker manifest annotate 'your-registry-uri/your-registry':netfield-app-sample-multi-arch 'your-registry-uri/your-registry':netfield-app-sample-arm32-0.3.0 --os linux --arch arm
 
-docker manifest push 'your-registry-uri/your-registry':netfield-app-sample-multi-arch --purge```
+docker manifest push 'your-registry-uri/your-registry':netfield-app-sample-multi-arch --purge
+```
