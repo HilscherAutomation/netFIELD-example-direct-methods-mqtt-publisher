@@ -50,4 +50,4 @@ docker manifest push 'your-registry-uri/your-registry':netfield-app-sample-multi
 ```
 
 
-You my use the file 'node-red_direct-method_SetTargetTemperature_sample WO credentials.txt' in a Node-Red to test your installation.
+You my use the file ```node-red_direct-method_SetTargetTemperature_sample WO credentials.txt``` in a Node-Red to test your installation.
