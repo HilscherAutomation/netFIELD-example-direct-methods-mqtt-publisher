@@ -48,3 +48,5 @@ docker manifest annotate 'your-registry-uri/your-registry':netfield-app-sample-m
 
 docker manifest push 'your-registry-uri/your-registry':netfield-app-sample-multi-arch --purge
 ```
+
+You my use the file 'node-red_direct-method_SetTargetTemperature_sample WO credentials.txt' in a Node-Red to test your installation.
